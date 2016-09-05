@@ -4,6 +4,8 @@ import { render } from 'react-dom';
 
 import App from '../import/ui/App.jsx';
 
-Meteor.startup(() => {
-  render(<App />, document.getElementById('render-target'));
-});
+if(Meteor.isClient){
+  Meteor.startup(() => {
+    render(<App />, document.getElementById('render-target'));
+  });  
+}

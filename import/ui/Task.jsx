@@ -6,13 +6,25 @@ import { Tasks } from '../api/task.js';
 export default class Task extends Component {
 
   toggleChecked() {
-    Tasks.update(this.props.task._id, {
-      $set : { checked: !this.props.task.checked }
+    Meteor.call("toggleCheck", this.props.task._id, this.props.task.checked, function(error, result){
+      if(error){
+        console.log("error", error);
+      }
+      if(result){
+         console.log("toggled!");
+      }
     });
   }
 
   deleteThisTask() {
-    Tasks.remove(this.props.task._id);
+    Meteor.call("removeTask", this.props.task._id, function(error, result){
+      if(error){
+        console.log("error", error);
+      }
+      if(result){
+         console.log("successfully deleted");
+      }
+    });
   }
 
   render() {
@@ -38,3 +50,15 @@ Task.propTypes = {
   // We can use propTypes to indicate it is required
   task: PropTypes.object.isRequired,
 };
+
+
+Meteor.methods({
+  removeTask: function(id) {
+    Tasks.remove(id);
+  },
+  toggleCheck: function(id, checked) {
+    Tasks.update(id, {
+      $set : { checked: !checked }
+    });
+  }
+});

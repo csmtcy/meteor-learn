@@ -68,7 +68,9 @@ export default class App extends Component {
 //   };
 // }, _ShowNumbers);
 
+
 export default createContainer(() => {
+  Meteor.subscribe("tasks");
   return {
     tasks: Tasks.find().fetch({}).reverse(),
     incompleteCount: Tasks.find({ checked: { $ne: true } }).count(),

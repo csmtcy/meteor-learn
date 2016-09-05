@@ -9,9 +9,13 @@ class AddTask extends Component {
     event.preventDefault();
     const text = ReactDOM.findDOMNode(this.refs.textinput).value.trim();
 
-    Tasks.insert({
-      text,
-      createAt: new Date(),
+    Meteor.call("addTask", text, function(error, result){
+      if(error){
+        console.log("error", error);
+      }
+      if(result){
+         console.log("added new task");
+      }
     });
 
     ReactDOM.findDOMNode(this.refs.textinput).value = "";
@@ -29,5 +33,14 @@ class AddTask extends Component {
   }
 
 }
+
+Meteor.methods({
+  addTask:function(title){
+    Tasks.insert({
+      text: title,
+      createAt: new Date(),
+    });
+  }
+});
 
 export default AddTask;
