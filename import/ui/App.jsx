@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
 
+import { Tasks } from '../api/task.js';
 import Task from './Task.jsx';
+import AddTask from './AddTask.jsx'
 
 // App component - represents the whole app
 export default class App extends Component {
-  getTasks() {
-    return [
-      { _id: 1, text: 'This is task 1' },
-      { _id: 2, text: 'This is task 2' },
-      { _id: 3, text: 'This is task 3' },
-    ];
-  }
-
   renderTasks() {
-    return this.getTasks().map((task) => (
+    return this.props.tasks.map((task) => (
       <Task key={task._id} task={task} />
     ));
   }
@@ -24,7 +19,7 @@ export default class App extends Component {
         <header>
           <h1>Todo List</h1>
         </header>
-
+        <AddTask />
         <ul>
           {this.renderTasks()}
         </ul>
@@ -32,3 +27,9 @@ export default class App extends Component {
     );
   }
 }
+
+export default createContainer(() => {
+  return {
+    tasks: Tasks.find({}).fetch(),
+  };
+}, App);
