@@ -4,6 +4,11 @@ import { Tasks } from '../api/task.js';
 
 // Task component - represents a single todo item
 export default class Task extends Component {
+  constructor() {
+    super();
+    console.log(store.getState());
+  }
+
 
   toggleChecked() {
     Meteor.call("toggleCheck", this.props.task._id, this.props.task.checked, function(error, result){
